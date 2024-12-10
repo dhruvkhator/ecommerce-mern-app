@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_payment_service
+    ports:
+      - "5901:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: OnePieceIsReal
+      POSTGRES_DB: payment_service
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+volumes:
+  postgres_data:
