@@ -1,11 +1,13 @@
 import { Kafka } from 'kafkajs';
 import { handleOrderExpired } from './paymentKafkaController.js';
 import logger from '../utils/logger.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const kafka = new Kafka({
-  clientId: 'local-service',
-  brokers: ['localhost:9092'],
+  clientId: 'local-service', // Adjust to your service name
+  brokers: [process.env.KAFKA_BROKER || ""], // Local Kafka broker
 });
 // Create a Kafka Consumer
 const consumer = kafka.consumer({ groupId: 'payment-group' });

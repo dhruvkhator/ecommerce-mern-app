@@ -1,9 +1,12 @@
 import { Kafka } from 'kafkajs';
 import logger from '../utils/logger.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const kafka = new Kafka({
   clientId: 'local-service', // Adjust to your service name
-  brokers: ['localhost:9092'], // Local Kafka broker
+  brokers: [process.env.KAFKA_BROKER || ""], // Local Kafka broker
 });
 
 const producer = kafka.producer();

@@ -1,11 +1,13 @@
 // Kafka Producer setup for Order-Service
 import { Kafka } from 'kafkajs';
 import logger from '../utils/logger.js';
+import dotenv from 'dotenv';
 
+dotenv.config();
 
 const kafka = new Kafka({
-  clientId: 'local-service',
-  brokers: ['localhost:9092'],
+  clientId: 'local-service', // Adjust to your service name
+  brokers: [process.env.KAFKA_BROKER || ""], // Local Kafka broker
 });
 
 // Create a Kafka Producer

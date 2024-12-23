@@ -1,4 +1,4 @@
-import { INVENTORY_HOST, ORDER_HOST, PAYMENT_HOST } from "@/utils/constants";
+import {  ORDER_HOST, PAYMENT_HOST } from "@/utils/constants";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 

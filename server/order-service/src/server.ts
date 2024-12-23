@@ -43,7 +43,6 @@ connectConsumer();
 
 app.use('/api/order', orderRoutes)
 
-
 app.listen(PORT, () => {
   logger.info(`Server is running on port ${PORT}`);
 });

@@ -1,4 +1,4 @@
-import { AUTH_HOST, ORDER_HOST, USER_HOST } from "@/utils/constants";
+import { AUTH_HOST, USER_HOST } from "@/utils/constants";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 

@@ -17,12 +17,14 @@ export const handleOrderExpired = async (orderId: OrderId) => {
       logger.info(`Checking payment status for order ID: ${orderId}`);
       const query = `SELECT * FROM payments WHERE order_id = $1;`;
       const order = await pool.query(query, [orderId]);
+      console.log("fetched")
   
       if (order.rows.length !== 0) {
         logger.info(`Payment record found for order ID: ${orderId}. Updating status to 'Failed'.`);
         
         const subquery = `UPDATE payments SET status='Failed', updated_at=CURRENT_TIMESTAMP WHERE order_id=$1;`;
         await pool.query(subquery, [orderId]);
+        console.log("updated")
   
         logger.info(`Payment status updated to 'Failed' for order ID: ${orderId}`);
       } else {

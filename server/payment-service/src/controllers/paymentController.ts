@@ -74,7 +74,7 @@ export const createPayment = async (req: xRequest, res: Response) => {
         .query(query, values)
         .then((result) => {
           logger.info(`Payment data saved to database successfully. Payment ID: ${paymentId}`);
-          res.status(201).json({
+          return res.status(201).json({
             message: "Payment created successfully.",
             approval_url: approvalUrl,
             payment: result.rows[0],
@@ -82,7 +82,7 @@ export const createPayment = async (req: xRequest, res: Response) => {
         })
         .catch((dbError) => {
           logger.error(`Database Error while saving payment: ${dbError.message}`);
-          res.status(500).json({ message: "Error saving payment to the database." });
+          return res.status(500).json({ message: "Error saving payment to the database." });
         });
     });
   } catch (error) {
@@ -91,7 +91,7 @@ export const createPayment = async (req: xRequest, res: Response) => {
       return res.status(400).json({ errors: error.errors });
     }
     logger.error(`Error creating payment: ${(error as Error).message}`);
-    res.status(500).json({ message: "Server error while creating payment." });
+    return res.status(500).json({ message: "Server error while creating payment." });
   }
 };
 

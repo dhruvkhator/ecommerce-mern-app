@@ -3,14 +3,24 @@ import Order from '../models/Order.js';
 import mongoose from 'mongoose';
 import { sendMessage } from '../kafka/orderKafkaProducer.js';
 import logger from '../utils/logger.js';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+
+const redisConnection = {
+  host: process.env.REDIS_HOST || "localhost", 
+  port: process.env.REDIS_PORT ? parseInt(process.env.REDIS_PORT, 10) : undefined, // Convert to number
+  username: "default", // Your Redis username (usually "default")
+  password: process.env.REDIS_PASSWORD || "your-redis-cloud-password", // Set the password from Redis Cloud
+  
+};
 
 // Create a new queue for handling order expiration
 export const orderQueue = new Queue('orderQueue', {
-  connection: {
-    host: 'localhost', 
-    port: 6379,
-  },
+  connection: redisConnection,
 });
+
 
 // Create a worker to process the expiration job
 export const orderWorker = new Worker(
@@ -23,10 +33,7 @@ export const orderWorker = new Worker(
     await handleOrderExpiration(orderId);
   },
   {
-    connection: {
-      host: 'localhost',
-      port: 6379,
-    },
+    connection: redisConnection,
   }
 );
 
