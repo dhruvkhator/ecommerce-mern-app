@@ -1,0 +1,89 @@
+version: '3.8'
+services:
+  auth-service:
+    build:
+      context: ./auth-service
+    ports:
+      - "5150:5150"
+    env_file:
+      - ./auth-service/.env
+    volumes:
+      - ./auth-service:/app  # Mount local folder to container
+      - /app/node_modules  # Prevent node_modules overwrite
+
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "5050:5050"
+    env_file:
+      - ./user-service/.env
+    volumes:
+      - ./user-service:/app
+      - /app/node_modules
+
+  product-service:
+    build:
+      context: ./product-service
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./product-service/.env
+    volumes:
+      - ./product-service:/app
+      - /app/node_modules
+
+  order-service:
+    build:
+      context: ./order-service
+    ports:
+      - "5100:5100"
+    env_file:
+      - ./order-service/.env
+    volumes:
+      - ./order-service:/app
+      - /app/node_modules
+
+  cart-service:
+    build:
+      context: ./cart-service
+    ports:
+      - "5350:5350"
+    env_file:
+      - ./cart-service/.env
+    volumes:
+      - ./cart-service:/app
+      - /app/node_modules
+
+  inventory-service:
+    build:
+      context: ./inventory-service
+    ports:
+      - "5250:5250"
+    env_file:
+      - ./inventory-service/.env
+    volumes:
+      - ./inventory-service:/app
+      - /app/node_modules
+
+  review-service:
+    build:
+      context: ./review-service
+    ports:
+      - "5300:5300"
+    env_file:
+      - ./review-service/.env
+    volumes:
+      - ./review-service:/app
+      - /app/node_modules
+
+  payment-service:
+    build:
+      context: ./payment-service
+    ports:
+      - "5400:5400"
+    env_file:
+      - ./payment-service/.env
+    volumes:
+      - ./payment-service:/app
+      - /app/node_modules
