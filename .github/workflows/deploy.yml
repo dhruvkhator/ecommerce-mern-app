@@ -44,5 +44,4 @@ jobs:
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} <<EOF
             cd /home/ec2-user/$service
             pm2 restart $service || pm2 start dist/server.js --name $service
-          EOF
         done
