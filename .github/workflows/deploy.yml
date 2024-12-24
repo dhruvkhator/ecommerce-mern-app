@@ -57,11 +57,11 @@ jobs:
           echo "Copied dist files for $service."
 
           # Copy the deployment script to the EC2 instance
-          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${{ secrets.EC2_PUBLIC_IP }}:
+          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@54.82.99.31:
           echo "Copied deployment script to EC2."
 
           # Execute the deployment script for the service
-          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} "bash ~/deploy_service.sh $service"
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@54.82.99.31 "bash ~/deploy_service.sh $service"
           echo "Executed deployment script for $service."
         done
 
