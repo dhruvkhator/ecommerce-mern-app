@@ -51,7 +51,15 @@ jobs:
         for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
         do
           echo "Deploying $service..."
+          
+          # Create the service directory if it doesn't exist
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "mkdir -p /home/ec2-user/$service"
+
+          # Copy the compiled files to the service directory
           scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:/home/ec2-user/$service
+
+          # Copy and execute the deployment script
           scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:/home/ec2-user/
           ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "bash /home/ec2-user/deploy_service.sh $service"
         done
+
