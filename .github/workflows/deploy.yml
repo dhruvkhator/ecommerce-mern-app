@@ -1,0 +1,63 @@
+name: Deploy Backend Services
+
+on:
+  push:
+    paths:
+      - 'server/**' # Trigger workflow when changes are made in the `server/` folder.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+        # Step 1: Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    # Step 2: Install dependencies and compile TypeScript for each service
+    - name: Install Dependencies & Build Auth Service
+      run: |
+        npm install --prefix server/auth-service
+        npm run build --prefix server/auth-service
+
+    - name: Install Dependencies & Build User Service
+      run: |
+        npm install --prefix server/user-service
+        npm run build --prefix server/user-service
+
+    - name: Install Dependencies & Build Product Service
+      run: |
+        npm install --prefix server/product-service
+        npm run build --prefix server/product-service
+
+    - name: Install Dependencies & Build Inventory Service
+      run: |
+        npm install --prefix server/inventory-service
+        npm run build --prefix server/inventory-service
+
+    - name: Install Dependencies & Build Payment Service
+      run: |
+        npm install --prefix server/payment-service
+        npm run build --prefix server/payment-service
+
+    - name: Install Dependencies & Build Review Service
+      run: |
+        npm install --prefix server/review-service
+        npm run build --prefix server/review-service
+
+    - name: Install Dependencies & Build Order Service
+      run: |
+        npm install --prefix server/order-service
+        npm run build --prefix server/order-service
+
+    - name: Install Dependencies & Build Cart Service
+      run: |
+        npm install --prefix server/cart-service
+        npm run build --prefix server/cart-service
+    
+    # Add further steps here (install dependencies, compile TypeScript, deploy to EC2)
