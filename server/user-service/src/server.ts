@@ -12,7 +12,11 @@ const app: Application = express();
 
 const PORT = process.env.PORT || 5050;
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+const allowedOrigins = [  
+  process.env.ORIGIN1,
+  process.env.ORIGIN2,
+  process.env.ORIGIN3
+];
 
 app.use(
     cors({

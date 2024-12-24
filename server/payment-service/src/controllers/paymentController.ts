@@ -17,8 +17,7 @@ interface xRequest extends Request {
   xrole?: string;
 }
 
-const allowedReturnPage = ["http://localhost:5173/shop/paypal-return", "http://localhost:3000/shop/paypal-return"];
-const allowedCancelPage= ["http://localhost:5173/shop/paypal-cancel", "http://localhost:3000/shop/paypal-cancel"]
+
 
 export const createPayment = async (req: xRequest, res: Response) => {
   logger.info("Create payment operation initiated.");
@@ -34,14 +33,16 @@ export const createPayment = async (req: xRequest, res: Response) => {
 
     logger.info(`Payment creation validated for user ID: ${userId}, order ID: ${orderId}, amount: ${amount}`);
 
+    const origin = req.headers.origin || process.env.ORIGIN3;
+
     const create_payment_json = {
       intent: "sale",
       payer: {
         payment_method: "paypal",
       },
       redirect_urls: {
-        return_url: `${req.headers.origin}/shop/paypal-return`,
-        cancel_url: `${req.headers.origin}/shop/paypal-cancel`,
+        return_url: `${origin}/shop/paypal-return`,
+        cancel_url: `${origin}/shop/paypal-cancel`,
       },
       transactions: [
         {

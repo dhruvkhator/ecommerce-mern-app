@@ -10,17 +10,21 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 5150;
 
-const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
+const allowedOrigins = [  
+    process.env.ORIGIN1,
+    process.env.ORIGIN2,
+    process.env.ORIGIN3
+];
 
 app.use(
     cors({
         origin: function (origin, callback) {
             if (!origin || allowedOrigins.includes(origin)) {
-              callback(null, true);
+                callback(null, true);
             } else {
-              callback(new Error('Not allowed by CORS'));
+                callback(new Error('Not allowed by CORS'));
             }
-          },
+        },
         methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
         allowedHeaders: [
             "Content-Type",
