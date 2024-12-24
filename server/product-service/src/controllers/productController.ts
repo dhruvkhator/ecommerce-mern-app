@@ -129,7 +129,7 @@ export const createProduct = async (req: Request, res: Response) => {
   
       logger.info(`Fetched product successfully for ID: ${id}`);
   
-      const stockResponse = await axios.get(`http://inventory-service:5250/api/inventory/get-stock/${id}`);
+      const stockResponse = await axios.get(`http://localhost:5250/api/inventory/get-stock/${id}`);
       const stock = stockResponse?.data?.inventory?.stock || 0;
       const productWithStock = { ...product.toObject(), stock };
   

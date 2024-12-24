@@ -104,7 +104,7 @@ export const viewCart = async (req: xRequest, res: Response) => {
       let priceUpdated = false;
       for (let item of cart.products) {
           try {
-              const productResponse = await axios.get<ProductResponse>(`http://product-service:5000/api/product/basic/${item.product}`);
+              const productResponse = await axios.get<ProductResponse>(`http://localhost:5000/api/product/basic/${item.product}`);
               const product = productResponse.data.product;
               if (product && product.price !== item.price) {
                   item.price = product.price;
