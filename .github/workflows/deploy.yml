@@ -40,7 +40,7 @@ jobs:
 
         # Dynamically create the deployment script
         echo "#!/bin/bash
-        cd /home/ec2-user/\$1
+        cd \$1
         pm2 restart \$1 || pm2 start dist/server.js --name \$1
         " > deploy_service.sh
 
