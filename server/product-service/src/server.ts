@@ -45,7 +45,7 @@ app.use(express.urlencoded({ extended: true}));
 
 
 connectDB();
-
+app.get('/', (req, res) => res.status(200).send('OK'));
 app.use('/api/brand', brandRoutes)
 app.use('/api/category', categoryRoutes)
 app.use('/api/product', productRoutes)

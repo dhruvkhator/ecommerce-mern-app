@@ -47,7 +47,7 @@ app.use(express.urlencoded({ extended: true}));
 connectDB();
 connectConsumer();
 
-
+app.get('/', (req, res) => res.status(200).send('OK'));
 app.use('/api/inventory', inventoryRoutes)
 
 

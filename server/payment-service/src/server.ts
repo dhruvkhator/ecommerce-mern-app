@@ -49,7 +49,7 @@ app.use(express.urlencoded({ extended: true}));
 
 connectProducer();
 connectConsumer();
-
+app.get('/', (req, res) => res.status(200).send('OK'));
 app.use('/api/payment', paymentRoutes)
 
 
