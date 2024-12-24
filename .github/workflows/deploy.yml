@@ -50,26 +50,18 @@ jobs:
         # Deploy each service
         for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
         do
-          echo "Ensuring directory for $service exists..."
-          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "mkdir -p /home/ec2-user/$service"
-          echo "Directory for $service is ready."
-        done
-
-        # Deploy each service
-        for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
-        do
           echo "Deploying $service..."
 
           # Copy the compiled files to the service directory
-          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:/home/ec2-user/$service
+          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:~/$service
           echo "Copied dist files for $service."
 
           # Copy the deployment script to the EC2 instance
-          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:/home/ec2-user/
+          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:~/
           echo "Copied deployment script to EC2."
 
           # Execute the deployment script for the service
-          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "bash /home/ec2-user/deploy_service.sh $service"
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "bash ~/deploy_service.sh $service"
           echo "Executed deployment script for $service."
         done
 
