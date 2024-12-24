@@ -53,11 +53,11 @@ jobs:
           echo "Deploying $service..."
 
           # Copy the compiled files to the service directory
-          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:~/$service
+          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:$service
           echo "Copied dist files for $service."
 
           # Copy the deployment script to the EC2 instance
-          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:~/
+          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:
           echo "Copied deployment script to EC2."
 
           # Execute the deployment script for the service
