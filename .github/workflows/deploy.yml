@@ -10,54 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the code from the repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-        # Step 1: Set up Node.js
+    # Step 2: Set up Node.js for TypeScript compilation
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: 16
 
-    # Step 2: Install dependencies and compile TypeScript for each service
-    - name: Install Dependencies & Build Auth Service
+    # Step 3: Install dependencies and compile TypeScript for each service
+    - name: Install Dependencies & Build Services
       run: |
-        npm install --prefix server/auth-service
-        npm run build --prefix server/auth-service
+        for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
+        do
+          echo "Building $service..."
+          npm install --prefix server/$service
+          npm run build --prefix server/$service
+        done
 
-    - name: Install Dependencies & Build User Service
+    # Step 4: Deploy the compiled JavaScript code to EC2
+    - name: Deploy to EC2
+      env:
+        EC2_HOST: secrets.EC2_PUBLIC_IP # Replace with your EC2 public IP or use GitHub Secrets
       run: |
-        npm install --prefix server/user-service
-        npm run build --prefix server/user-service
-
-    - name: Install Dependencies & Build Product Service
-      run: |
-        npm install --prefix server/product-service
-        npm run build --prefix server/product-service
-
-    - name: Install Dependencies & Build Inventory Service
-      run: |
-        npm install --prefix server/inventory-service
-        npm run build --prefix server/inventory-service
-
-    - name: Install Dependencies & Build Payment Service
-      run: |
-        npm install --prefix server/payment-service
-        npm run build --prefix server/payment-service
-
-    - name: Install Dependencies & Build Review Service
-      run: |
-        npm install --prefix server/review-service
-        npm run build --prefix server/review-service
-
-    - name: Install Dependencies & Build Order Service
-      run: |
-        npm install --prefix server/order-service
-        npm run build --prefix server/order-service
-
-    - name: Install Dependencies & Build Cart Service
-      run: |
-        npm install --prefix server/cart-service
-        npm run build --prefix server/cart-service
-    
-    # Add further steps here (install dependencies, compile TypeScript, deploy to EC2)
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 400 key.pem
+        for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
+        do
+          echo "Deploying $service..."
+          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:/home/ec2-user/$service
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} << EOF
+            cd /home/ec2-user/$service
+            pm2 restart $service || pm2 start dist/server.js --name $service
+          EOF
+        done
