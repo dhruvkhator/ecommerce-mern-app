@@ -40,7 +40,11 @@ jobs:
 
         # Dynamically create the deployment script
         echo "#!/bin/bash
-        cd \$1
+        cd ~/\$1
+        if [ ! -d node_modules ]; then
+          echo 'Installing dependencies for \$1...'
+          npm install
+        fi
         pm2 describe \$1 > /dev/null 2>&1
         if [ \$? -eq 0 ]; then
           echo 'Service already running. Restarting...'
@@ -60,7 +64,7 @@ jobs:
           echo "Deploying $service..."
 
           # Copy the compiled files to the service directory
-          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@54.82.99.31:$service
+          scp -i key.pem -o StrictHostKeyChecking=no -r server/$service ec2-user@54.82.99.31:$service
           echo "Copied dist files for $service."
 
           # Copy the deployment script to the EC2 instance
