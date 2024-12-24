@@ -34,8 +34,8 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "/auth/login",
-
   async (formData) => {
+    console.log(AUTH_HOST, import.meta.env.VITE_AUTH_SERVER)
     try {
       const response = await axios.post(
         `${AUTH_HOST}/signin`,
