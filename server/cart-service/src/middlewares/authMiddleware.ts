@@ -19,6 +19,7 @@ const authMiddleware = (req: AuthReqBody, res: Response, next: NextFunction) => 
     logger.info("Auth middleware initiated.");
     try {
         const token = req.cookies.user_token;
+        console.log(req.cookies.user_token)
 
         if (!token) {
             logger.warn("Unauthorized access attempt: Missing token.");
