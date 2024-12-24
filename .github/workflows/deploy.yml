@@ -41,7 +41,14 @@ jobs:
         # Dynamically create the deployment script
         echo "#!/bin/bash
         cd \$1
-        pm2 restart \$1 || pm2 start dist/server.js --name \$1
+        pm2 describe \$1 > /dev/null 2>&1
+        if [ \$? -eq 0 ]; then
+          echo 'Service already running. Restarting...'
+          pm2 restart \$1 -f
+        else
+          echo 'Service not found. Starting new process...'
+          pm2 start dist/server.js --name \$1
+        fi
         " > deploy_service.sh
 
         # Make the script executable
