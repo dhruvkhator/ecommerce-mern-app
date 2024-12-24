@@ -31,18 +31,27 @@ jobs:
         done
 
     # Step 4: Deploy the compiled JavaScript code to EC2
-    - name: Deploy to EC2
+        - name: Deploy to EC2
       env:
-        EC2_HOST: ${{ secrets.EC2_PUBLIC_IP }} # Replace with your EC2 public IP or use GitHub Secrets
+        EC2_HOST: ${{ secrets.EC2_PUBLIC_IP }}
       run: |
         echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
         chmod 400 key.pem
+
+        # Dynamically create the deployment script
+        echo "#!/bin/bash
+        cd /home/ec2-user/\$1
+        pm2 restart \$1 || pm2 start dist/server.js --name \$1
+        " > deploy_service.sh
+
+        # Make the script executable
+        chmod +x deploy_service.sh
+
+        # Deploy each service
         for service in auth-service user-service product-service inventory-service payment-service review-service order-service cart-service
         do
           echo "Deploying $service..."
           scp -i key.pem -o StrictHostKeyChecking=no -r server/$service/dist ec2-user@${EC2_HOST}:/home/ec2-user/$service
-          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} <<EOF
-            cd /home/ec2-user/$service
-            pm2 restart $service || pm2 start dist/server.js --name $service
-            EOF
+          scp -i key.pem -o StrictHostKeyChecking=no deploy_service.sh ec2-user@${EC2_HOST}:/home/ec2-user/
+          ssh -i key.pem -o StrictHostKeyChecking=no ec2-user@${EC2_HOST} "bash /home/ec2-user/deploy_service.sh $service"
         done
