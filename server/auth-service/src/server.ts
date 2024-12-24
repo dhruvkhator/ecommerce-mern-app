@@ -44,6 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 connectDB();
 
 // Routes
+app.get('/', (req, res) => res.status(200).send('OK'));
 app.use('/api/auth', authRoutes);
 
 // Start Server
