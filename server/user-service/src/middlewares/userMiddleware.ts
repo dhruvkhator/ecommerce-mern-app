@@ -18,11 +18,18 @@ interface AuthReqBody extends Request {
 const authMiddleware = (req: AuthReqBody, res: Response, next: NextFunction) => {
     logger.info("Auth middleware initiated.");
     try {
-        const token = req.cookies.user_token;
+        const authHeader = req.headers['authorization'];
+
+        if (!authHeader) {
+            logger.warn("Unauthorized access attempt: Missing authorization header.");
+            return res.status(401).json({ message: "Authorization header missing", errorCode:"NO_AUTH_HEADER" });
+        }
+
+        const token = authHeader.split(' ')[1];
 
         if (!token) {
             logger.warn("Unauthorized access attempt: Missing token.");
-            return res.status(401).json({ error: 'Unauthorized - Missing token', errorCode: "NO_TOKEN" });
+            return res.status(401).json({ message: 'Unauthorized - Missing token', errorCode: "NO_TOKEN" });
         }
 
         const decoded = jwt.verify(token, JWT_SECRET) as { id: string; role: string };
@@ -30,7 +37,7 @@ const authMiddleware = (req: AuthReqBody, res: Response, next: NextFunction) => 
 
         if (!decoded.id) {
             logger.warn("Unauthorized access attempt: Missing user ID in token.");
-            return res.status(401).json({ error: 'Unauthorized - Missing ID', errorCode: "NO_ID" });
+            return res.status(401).json({ message: 'Unauthorized - Missing ID', errorCode: "NO_ID" });
         }
 
         req.xid = decoded.id;
@@ -43,13 +50,13 @@ const authMiddleware = (req: AuthReqBody, res: Response, next: NextFunction) => 
     } catch (error) {
         if (error instanceof TokenExpiredError) {
             logger.warn("Unauthorized access: Token expired.");
-            return res.status(401).json({ error: 'Unauthorized - Token expired', errorCode: "EXPIRE_TOKEN" });
+            return res.status(401).json({ message: 'Unauthorized - Token expired', errorCode: "EXPIRE_TOKEN" });
         } else if (error instanceof JsonWebTokenError) {
             logger.warn("Unauthorized access: Invalid token.");
-            return res.status(401).json({ error: 'Unauthorized - Invalid token', errorCode: "INVALID_TOKEN" });
+            return res.status(401).json({ message: 'Unauthorized - Invalid token', errorCode: "INVALID_TOKEN" });
         } else {
             logger.error(`Unexpected error in auth middleware: ${(error as Error).message}`);
-            return res.status(500).json({ error: "Server error while verifying token" });
+            return res.status(500).json({ message: "Server error while verifying token" });
         }
     }
 };

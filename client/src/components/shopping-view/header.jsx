@@ -11,11 +11,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-import { logoutUser } from "@/store/auth-slice";
+import { Avatar, AvatarFallback } from "../ui/avatar";;
 import UserCartWrapper from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
+import { logoutUser } from "@/store/auth-slice";
 
 
 const HeaderRightContent = ({ setVisibility, visibility, setIsOpen }) => {
@@ -26,7 +26,9 @@ const HeaderRightContent = ({ setVisibility, visibility, setIsOpen }) => {
   const dispatch = useDispatch();
 
   const handleLogout =()=> {
+    localStorage.removeItem('token');
     dispatch(logoutUser());
+    console.log('User logged out successfully');
   }
 
   useEffect(() => {

@@ -3,8 +3,11 @@ import Cart from '../models/Cart.js';
 import axios from 'axios';
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import { z } from 'zod';
 import logger from '../utils/logger.js';
+
+dotenv.config();
 
 // Add Product to Cart
 const addProductToCartSchema = z.object({
@@ -45,7 +48,7 @@ export const addProductToCart = async (req: xRequest, res: Response) => {
       const { productId, quantity } = validatedData;
       logger.info(`Validated data: Product ID - ${productId}, Quantity - ${quantity}`);
 
-      const productResponse = await axios.get<ProductResponse>(`http://product-service:5000/api/product/basic/${productId}`);
+      const productResponse = await axios.get<ProductResponse>(`${process.env.PRODUCT_HOST}/api/product/basic/${productId}`);
       const product = productResponse.data.product;
 
       if (!product) {
@@ -104,7 +107,7 @@ export const viewCart = async (req: xRequest, res: Response) => {
       let priceUpdated = false;
       for (let item of cart.products) {
           try {
-              const productResponse = await axios.get<ProductResponse>(`http://localhost:5000/api/product/basic/${item.product}`);
+              const productResponse = await axios.get<ProductResponse>(`${process.env.PRODUCT_HOST}/api/product/basic/${item.product}`);
               const product = productResponse.data.product;
               if (product && product.price !== item.price) {
                   item.price = product.price;

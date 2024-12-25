@@ -79,15 +79,6 @@ export const signinUser = async (req: Request, res: Response) => {
         const token = jwt.sign(payload, JWT_SECRET, { expiresIn: 24 * 60 * 60 * 1000 });
         logger.info(`Token generated successfully for user: ${user.email}`);
 
-        res.cookie("user_token", token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
-            domain:'.onrender.com',
-            path:'/',
-            maxAge: 24 * 60 * 60 * 1000,
-        });
-
         const { password, ...userResponse } = user.toObject();
         res.status(200).json({ user: userResponse, token, message: "Successfully signed in!", code: "SUCCESS" });
     } catch (error) {
@@ -104,10 +95,6 @@ export const logoutUser = async (req: Request, res: Response) => {
     logger.info("Logout process initiated.");
 
     try {
-        res.clearCookie("user_token").json({ 
-            message: "Logged out successfully", 
-            code: "SUCCESS" 
-        });
         logger.info("User logged out successfully.");
     } catch (error) {
         logger.error(`Error during logout: ${(error as Error).message}`);

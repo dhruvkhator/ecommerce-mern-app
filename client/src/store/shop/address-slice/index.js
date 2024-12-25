@@ -1,4 +1,5 @@
 import { USER_HOST } from "@/utils/constants";
+import { getItemWithExpiration } from "@/utils/storageUtils";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -10,11 +11,12 @@ const initialState = {
 export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
-    console.log(formData)
+
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         `${USER_HOST}/address`,
-        {addressData: formData}, { withCredentials: true}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token}` }}
       );
 
 
@@ -32,8 +34,9 @@ export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async () => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${USER_HOST}/address`, { withCredentials:true}
+        `${USER_HOST}/address`, { headers: { Authorization: `Bearer ${token}` }}
       );
 
       return response.data;
@@ -49,10 +52,10 @@ export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({  addressId, formData }) => {
     try {
-      
+      const token = localStorage.getItem('token');
       const response = await axios.patch(
         `${USER_HOST}/address/${addressId}`,
-        {addressData: formData}, { withCredentials: true}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token}` }}
       );
 
       return response.data;
@@ -68,8 +71,9 @@ export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({  addressId }) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.delete(
-        `${USER_HOST}/address/${addressId}`, {withCredentials:true}
+        `${USER_HOST}/address/${addressId}`, {headers: { Authorization: `Bearer ${token}` }}
       );
   
       return response.data;

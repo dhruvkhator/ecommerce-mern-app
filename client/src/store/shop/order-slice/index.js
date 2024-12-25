@@ -14,9 +14,10 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         `${ORDER_HOST}`, 
-        {orderData}, { withCredentials: true}
+        {orderData}, { headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response)
       return response.data;
@@ -33,9 +34,10 @@ export const createPayment = createAsyncThunk(
   "/payment/createPayment",
   async (data) => {
     try {
+      const token = localStorage.getItem('token');
       const response = await axios.post(
         `${PAYMENT_HOST}`, 
-        {data}, { withCredentials: true}
+        {data}, { headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response)
       return response.data;
@@ -52,13 +54,13 @@ export const capturePayment = createAsyncThunk(
   "/payment/capturePayment",
   async ({ paymentId, payerId, status }) => {
     try {
-      
+      const token = localStorage.getItem('token');
       const response = await axios.patch(
         `${PAYMENT_HOST}/${paymentId}/status`, 
         {
           status,
           payerId,
-        }, {withCredentials:true}
+        }, {headers: { Authorization: `Bearer ${token}` }}
       );
   
   
@@ -93,9 +95,9 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async () => {
     try {
-
+      const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${ORDER_HOST}`, {withCredentials:true}
+        `${ORDER_HOST}`, {headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response.data)
       return response.data;
@@ -110,9 +112,9 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     try {
-      
+      const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${ORDER_HOST}/${id}/details`, {withCredentials:true }
+        `${ORDER_HOST}/${id}/details`, {headers: { Authorization: `Bearer ${token}` } }
       );
       
       //console.log(response.data);

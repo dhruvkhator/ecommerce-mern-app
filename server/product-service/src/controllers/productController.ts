@@ -2,9 +2,12 @@ import { Request, Response } from 'express';
 import Product, { IProduct } from '../models/Product.js';
 import axios from 'axios';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import { z } from 'zod';
 import logger from '../utils/logger.js';
 import { enrichProductWithStock } from '../utils/getStockData.js';
+
+dotenv.config();
 
 const productSchema = z.object({
     name: z.string().min(1, { message: "Name is required" }),
@@ -129,7 +132,7 @@ export const createProduct = async (req: Request, res: Response) => {
   
       logger.info(`Fetched product successfully for ID: ${id}`);
   
-      const stockResponse = await axios.get(`http://localhost:5250/api/inventory/get-stock/${id}`);
+      const stockResponse = await axios.get(`${process.env.INVENTORY_HOST}/api/inventory/get-stock/${id}`);
       const stock = stockResponse?.data?.inventory?.stock || 0;
       const productWithStock = { ...product.toObject(), stock };
   
