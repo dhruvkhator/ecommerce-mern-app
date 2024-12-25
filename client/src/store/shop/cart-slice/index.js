@@ -12,13 +12,13 @@ export const addToCart = createAsyncThunk(
   async ({ productId, quantity }) => {
     try {
       const token = localStorage.getItem('token');
-      console.log(token);
+      console.log(token.value);
       const response = await axios.post(
         `${CART_HOST}`,
         {
           productId,
           quantity,
-        },{headers: { Authorization: `Bearer ${token}` }}
+        },{headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response)
       return response.data;
@@ -38,7 +38,7 @@ export const fetchCartItems = createAsyncThunk(
       const token = localStorage.getItem('token');
       console.log(token)
       const response = await axios.get(
-        `${CART_HOST}`, {headers: { Authorization: `Bearer ${token}` }}
+        `${CART_HOST}`, {headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response.data)
       return response.data;
@@ -55,7 +55,7 @@ export const deleteCartItem = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.delete(
-        `${CART_HOST}/${productId}`, {headers: { Authorization: `Bearer ${token}` }}
+        `${CART_HOST}/${productId}`, {headers: { Authorization: `Bearer ${token.value}` }}
       );
   
       return response.data;
@@ -75,7 +75,7 @@ export const updateCartQuantity = createAsyncThunk(
         `${CART_HOST}/${productId}`,
         {
           quantity,
-        }, { headers: { Authorization: `Bearer ${token}` }}
+        }, { headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response.data)
       return response.data;

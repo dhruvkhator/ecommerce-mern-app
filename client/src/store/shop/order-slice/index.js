@@ -17,7 +17,7 @@ export const createNewOrder = createAsyncThunk(
       const token = localStorage.getItem('token');
       const response = await axios.post(
         `${ORDER_HOST}`, 
-        {orderData}, { headers: { Authorization: `Bearer ${token}` }}
+        {orderData}, { headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response)
       return response.data;
@@ -37,7 +37,7 @@ export const createPayment = createAsyncThunk(
       const token = localStorage.getItem('token');
       const response = await axios.post(
         `${PAYMENT_HOST}`, 
-        {data}, { headers: { Authorization: `Bearer ${token}` }}
+        {data}, { headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response)
       return response.data;
@@ -60,7 +60,7 @@ export const capturePayment = createAsyncThunk(
         {
           status,
           payerId,
-        }, {headers: { Authorization: `Bearer ${token}` }}
+        }, {headers: { Authorization: `Bearer ${token.value}` }}
       );
   
   
@@ -97,7 +97,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${ORDER_HOST}`, {headers: { Authorization: `Bearer ${token}` }}
+        `${ORDER_HOST}`, {headers: { Authorization: `Bearer ${token.value}` }}
       );
       //console.log(response.data)
       return response.data;
@@ -114,7 +114,7 @@ export const getOrderDetails = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${ORDER_HOST}/${id}/details`, {headers: { Authorization: `Bearer ${token}` } }
+        `${ORDER_HOST}/${id}/details`, {headers: { Authorization: `Bearer ${token.value}` } }
       );
       
       //console.log(response.data);
