@@ -16,7 +16,7 @@ export const addNewAddress = createAsyncThunk(
       const token = localStorage.getItem('token');
       const response = await axios.post(
         `${USER_HOST}/address`,
-        {addressData: formData}, { headers: { Authorization: `Bearer ${token.value}` }}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token['value']}` }}
       );
 
 
@@ -36,7 +36,7 @@ export const fetchAllAddresses = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.get(
-        `${USER_HOST}/address`, { headers: { Authorization: `Bearer ${token.value}` }}
+        `${USER_HOST}/address`, { headers: { Authorization: `Bearer ${token['value']}` }}
       );
 
       return response.data;
@@ -55,7 +55,7 @@ export const editaAddress = createAsyncThunk(
       const token = localStorage.getItem('token');
       const response = await axios.patch(
         `${USER_HOST}/address/${addressId}`,
-        {addressData: formData}, { headers: { Authorization: `Bearer ${token.value}` }}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token['value']}` }}
       );
 
       return response.data;
@@ -73,7 +73,7 @@ export const deleteAddress = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const response = await axios.delete(
-        `${USER_HOST}/address/${addressId}`, {headers: { Authorization: `Bearer ${token.value}` }}
+        `${USER_HOST}/address/${addressId}`, {headers: { Authorization: `Bearer ${token['value']}` }}
       );
   
       return response.data;

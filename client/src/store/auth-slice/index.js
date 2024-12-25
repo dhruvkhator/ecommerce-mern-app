@@ -86,7 +86,7 @@ export const checkAuth = createAsyncThunk(
       // Proceed to validate the token with the backend
       const response = await axios.get(`${USER_HOST}/check-auth`, {
         headers: {
-          Authorization: `Bearer ${token.value}`,
+          Authorization: `Bearer ${token['value']}`,
           "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
         },
       });

@@ -14,7 +14,7 @@ export const addReview = createAsyncThunk(
       const token = localStorage.getItem('token');
       const response = await axios.post(
         `${REVIEW_HOST}`,
-        formdata, { headers: { Authorization: `Bearer ${token.value}` }}
+        formdata, { headers: { Authorization: `Bearer ${token['value']}` }}
       );
   
       return response.data;
