@@ -12,6 +12,7 @@ export const addToCart = createAsyncThunk(
   async ({ productId, quantity }) => {
     try {
       const token = localStorage.getItem('token');
+      console.log(token);
       const response = await axios.post(
         `${CART_HOST}`,
         {
@@ -35,6 +36,7 @@ export const fetchCartItems = createAsyncThunk(
   async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log(token)
       const response = await axios.get(
         `${CART_HOST}`, {headers: { Authorization: `Bearer ${token}` }}
       );

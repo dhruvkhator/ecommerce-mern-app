@@ -19,6 +19,7 @@ const authMiddleware = (req: AuthReqBody, res: Response, next: NextFunction) => 
     logger.info("Auth middleware initiated.");
     try {
         const authHeader = req.headers['authorization'];
+        console.log(authHeader);
 
         if (!authHeader) {
             logger.warn("Unauthorized access attempt: Missing authorization header.");
