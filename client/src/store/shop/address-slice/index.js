@@ -13,10 +13,10 @@ export const addNewAddress = createAsyncThunk(
   async (formData) => {
 
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.post(
         `${USER_HOST}/address`,
-        {addressData: formData}, { headers: { Authorization: `Bearer ${token['value']}` }}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token}` }}
       );
 
 
@@ -34,9 +34,9 @@ export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.get(
-        `${USER_HOST}/address`, { headers: { Authorization: `Bearer ${token['value']}` }}
+        `${USER_HOST}/address`, { headers: { Authorization: `Bearer ${token}` }}
       );
 
       return response.data;
@@ -52,10 +52,10 @@ export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({  addressId, formData }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.patch(
         `${USER_HOST}/address/${addressId}`,
-        {addressData: formData}, { headers: { Authorization: `Bearer ${token['value']}` }}
+        {addressData: formData}, { headers: { Authorization: `Bearer ${token}` }}
       );
 
       return response.data;
@@ -71,9 +71,9 @@ export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({  addressId }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.delete(
-        `${USER_HOST}/address/${addressId}`, {headers: { Authorization: `Bearer ${token['value']}` }}
+        `${USER_HOST}/address/${addressId}`, {headers: { Authorization: `Bearer ${token}` }}
       );
   
       return response.data;

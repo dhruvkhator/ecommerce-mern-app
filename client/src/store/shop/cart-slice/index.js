@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { CART_HOST } from "@/utils/constants";
+import { getItemWithExpiration } from "@/utils/storageUtils";
 
 const initialState = {
   cartItems: [],
@@ -11,14 +12,14 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ productId, quantity }) => {
     try {
-      const token = localStorage.getItem('token');
-      console.log(token['value']);
+      const token = getItemWithExpiration('token');
+      console.log(token);
       const response = await axios.post(
         `${CART_HOST}`,
         {
           productId,
           quantity,
-        },{headers: { Authorization: `Bearer ${token['value']}` }}
+        },{headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response)
       return response.data;
@@ -35,10 +36,10 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       console.log(token)
       const response = await axios.get(
-        `${CART_HOST}`, {headers: { Authorization: `Bearer ${token['value']}` }}
+        `${CART_HOST}`, {headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response.data)
       return response.data;
@@ -53,9 +54,9 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({  productId }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.delete(
-        `${CART_HOST}/${productId}`, {headers: { Authorization: `Bearer ${token['value']}` }}
+        `${CART_HOST}/${productId}`, {headers: { Authorization: `Bearer ${token}` }}
       );
   
       return response.data;
@@ -70,12 +71,12 @@ export const updateCartQuantity = createAsyncThunk(
   "cart/updateCartQuantity",
   async ({ productId, quantity }) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.put(
         `${CART_HOST}/${productId}`,
         {
           quantity,
-        }, { headers: { Authorization: `Bearer ${token['value']}` }}
+        }, { headers: { Authorization: `Bearer ${token}` }}
       );
       //console.log(response.data)
       return response.data;

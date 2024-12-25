@@ -1,6 +1,7 @@
 import { REVIEW_HOST } from "@/utils/constants";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { getItemWithExpiration } from "@/utils/storageUtils";
 
 const initialState = {
   isLoading: false,
@@ -11,10 +12,10 @@ export const addReview = createAsyncThunk(
   "/order/addReview",
   async (formdata) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = getItemWithExpiration('token');
       const response = await axios.post(
         `${REVIEW_HOST}`,
-        formdata, { headers: { Authorization: `Bearer ${token['value']}` }}
+        formdata, { headers: { Authorization: `Bearer ${token}` }}
       );
   
       return response.data;
